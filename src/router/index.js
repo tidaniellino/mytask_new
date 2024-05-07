@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Task from '@/views/Task.vue'
 import Calendar from '@/views/calendar.vue'
-import Finance from '@views/Finance.vue'
+import Financeiro from '@/views/financeiro.vue'
 
 const routes = [
   {
@@ -23,9 +23,8 @@ const routes = [
   {
     path: '/finance',
     name: 'finance',
-    component: finance
-  }
-  
+    component: Financeiro
+  },
 ]
 
 const router = createRouter({
