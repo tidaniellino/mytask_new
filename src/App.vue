@@ -15,7 +15,11 @@
         <v-list>
           <v-list-item prepend-icon="mdi-home" title="Home" to="/"></v-list-item>
           <v-list-item prepend-icon="mdi-check" title="Task" to="/task"></v-list-item>
-          <v-list-item prepend-icon="mdi-finance" title="Finance"></v-list-item>
+          <v-list-item
+            prepend-icon="mdi-finance"
+            title="Finance"
+            to="/finance"
+          ></v-list-item>
           <v-list-item
             prepend-icon="mdi-calendar"
             title="calendar"

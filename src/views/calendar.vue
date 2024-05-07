@@ -1,107 +1,92 @@
 <template>
-  <div>
-    <v-app theme="dark">
-      <v-main>
-        <v-sheet class="d-flex" height="54" tile>
-          <v-select
-            v-model="type"
-            :items="types"
-            class="ma-2"
-            label="View Mode"
-            variant="outlined"
-            dense
-            hide-details
-          ></v-select>
-          <v-select
-            v-model="weekday"
-            :items="weekdays"
-            class="ma-2"
-            label="weekdays"
-            variant="outlined"
-            dense
-            hide-details
-          ></v-select>
-        </v-sheet>
-        <v-sheet>
-          <v-calendar
-            ref="calendar"
-            v-model="value"
-            :events="events"
-            :view-mode="type"
-            :weekdays="weekday"
-          ></v-calendar>
-        </v-sheet>
-      </v-main>
-    </v-app>
-  </div>
-</template>
-<script>
-import { useDate } from "vuetify";
+  <v-app theme="dark">
+    <v-container>
+      <!-- Título da página -->
+      <h1>Calendar</h1>
 
+      <!-- Selecionar data -->
+      <v-row>
+        <v-col cols="12" md="6">
+          <v-date-picker
+            v-model="selectedDate"
+            :min="new Date()"
+            no-title
+            scrollable
+            @input="getSelectedEvents"
+          ></v-date-picker>
+        </v-col>
+      </v-row>
+
+      <!-- Formulário para adicionar evento -->
+      <v-row>
+        <v-col cols="12" md="6">
+          <v-form @submit.prevent="addEvent">
+            <v-text-field v-model="newEvent.title" label="Event"></v-text-field>
+            <v-btn type="submit" color="primary">Add event</v-btn>
+          </v-form>
+        </v-col>
+      </v-row>
+
+      <!-- Lista de eventos para o dia selecionado -->
+      <v-row v-if="selectedDate">
+        <v-col cols="12">
+          <h2>Eventos do Dia {{ selectedDate.toLocaleDateString() }}</h2>
+          <ul>
+            <li v-for="(event, index) in selectedEvents" :key="index">
+              {{ event.title }} <v-btn @click="removeEvent(index)" text>x</v-btn>
+            </li>
+          </ul>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-app>
+</template>
+
+<script>
 export default {
-  data: () => ({
-    type: "month",
-    types: ["month", "week", "day"],
-    weekday: [0, 1, 2, 3, 4, 5, 6],
-    weekdays: [
-      { title: "Sun - Sat", value: [0, 1, 2, 3, 4, 5, 6] },
-      { title: "Mon - Sun", value: [1, 2, 3, 4, 5, 6, 0] },
-      { title: "Mon - Fri", value: [1, 2, 3, 4, 5] },
-      { title: "Mon, Wed, Fri", value: [1, 3, 5] },
-    ],
-    value: [new Date()],
-    events: [],
-    colors: ["blue", "indigo", "deep-purple", "cyan", "green", "orange", "grey darken-1"],
-    titles: [
-      "Meeting",
-      "Holiday",
-      "PTO",
-      "Travel",
-      "Event",
-      "Birthday",
-      "Conference",
-      "Party",
-    ],
-  }),
-  mounted() {
-    const adapter = useDate();
-    this.getEvents({
-      start: adapter.startOfDay(adapter.startOfMonth(new Date())),
-      end: adapter.endOfDay(adapter.endOfMonth(new Date())),
-    });
+  data() {
+    return {
+      selectedDate: null,
+      events: [], // Lista de todos os eventos
+      newEvent: {
+        title: "",
+      },
+    };
+  },
+  computed: {
+    // Lista de eventos para o dia selecionado
+    selectedEvents() {
+      if (!this.selectedDate) return [];
+      return this.events.filter((event) =>
+        this.isSameDay(event.start, this.selectedDate)
+      );
+    },
   },
   methods: {
-    getEvents({ start, end }) {
-      const events = [];
-
-      const min = start;
-      const max = end;
-      const days = (max.getTime() - min.getTime()) / 86400000;
-      const eventCount = this.rnd(days, days + 20);
-
-      for (let i = 0; i < eventCount; i++) {
-        const allDay = this.rnd(0, 3) === 0;
-        const firstTimestamp = this.rnd(min.getTime(), max.getTime());
-        const first = new Date(firstTimestamp - (firstTimestamp % 900000));
-        const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000;
-        const second = new Date(first.getTime() + secondTimestamp);
-
-        events.push({
-          title: this.titles[this.rnd(0, this.titles.length - 1)],
-          start: first,
-          end: second,
-          color: this.colors[this.rnd(0, this.colors.length - 1)],
-          allDay: !allDay,
-        });
-      }
-
-      this.events = events;
+    // Adicionar um novo evento
+    addEvent() {
+      if (!this.selectedDate || !this.newEvent.title.trim()) return;
+      this.events.push({
+        title: this.newEvent.title,
+        start: new Date(this.selectedDate), // Clonar a data selecionada
+      });
+      this.newEvent.title = ""; // Limpar o campo do título do evento
     },
-    getEventColor(event) {
-      return event.color;
+    // Remover um evento
+    removeEvent(index) {
+      this.events.splice(index, 1);
     },
-    rnd(a, b) {
-      return Math.floor((b - a + 1) * Math.random()) + a;
+    // Obter eventos para a data selecionada
+    getSelectedEvents() {
+      // Aqui você pode implementar a lógica para obter os eventos da data selecionada, se necessário
+    },
+    // Verificar se duas datas são do mesmo dia
+    isSameDay(date1, date2) {
+      return (
+        date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate()
+      );
     },
   },
 };

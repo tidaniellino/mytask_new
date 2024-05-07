@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Task from '@/views/Task.vue'
 import Calendar from '@/views/calendar.vue'
+import Finance from '@views/Finance.vue'
 
 const routes = [
   {
@@ -19,6 +20,11 @@ const routes = [
     name: 'calendar',
     component: Calendar
   },
+  {
+    path: '/finance',
+    name: 'finance',
+    component: finance
+  }
   
 ]
 
