@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app theme="dark">
     <v-container>
       <!-- Título da página -->
       <h1>Controle Financeiro</h1>
