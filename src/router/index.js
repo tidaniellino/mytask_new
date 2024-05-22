@@ -1,14 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import Home from '@/views/Home.vue'
 import Task from '@/views/Task.vue'
 import Calendar from '@/views/calendar.vue'
 import Financeiro from '@/views/financeiro.vue'
+import Cadastro_user from '@/views/cadastro_user.vue'
+import Login from '@/views/login.vue'
 
 const routes = [
   {
-    path: '/',
+    path: '/home',
     name: 'home',
-    component: HomeView
+    component: Home
   },
   {
     path: '/task',
@@ -25,6 +27,18 @@ const routes = [
     name: 'finance',
     component: Financeiro
   },
+  {
+    path: '/cada_user',
+    name: 'cada_user',
+    component: Cadastro_user
+
+  },
+  {
+    path: '/',
+    name: 'login',
+    component: Login
+
+  }
 ]
 
 const router = createRouter({

@@ -4,6 +4,8 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
+import Vue from 'vue';
+import axios from 'axios'
 
 loadFonts()
 
